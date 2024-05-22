@@ -1,6 +1,6 @@
-#define BLYNK_TEMPLATE_ID "TMPL3_wGdnTHV"
-#define BLYNK_TEMPLATE_NAME "Soil Monitoring"
-#define BLYNK_AUTH_TOKEN "zqHNyQaFRXJGcyEcz_HM3Bs4tvSfBkBM"
+#define BLYNK_TEMPLATE_ID "************"
+#define BLYNK_TEMPLATE_NAME "**************"
+#define BLYNK_AUTH_TOKEN "***********************************"
 
 #include <DHT.h>
 #include <Wire.h>
