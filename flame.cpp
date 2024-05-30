@@ -3,7 +3,7 @@
 // Define pin connections
 const int flameSensorPin = A0; // Analog pin for flame sensor
 const int relayPin = 7;        // Digital pin for relay
-const int servoPin = 9;        // Digital pin for servo
+const int servoPin = 10;        // Digital pin for servo
 
 Servo myServo; // Create servo object
 
