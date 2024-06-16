@@ -5,7 +5,7 @@
 // Create an RF24 object
 RF24 radio(9, 10); // CE, CSN
 
-// Address through which two modules communicate.
+///// Address through which two modules communicate.
 const byte address[6] = "00001";
 
 void setup() {
