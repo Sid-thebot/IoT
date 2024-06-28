@@ -16,7 +16,7 @@ void setup() {
 }
 
 void loop() {
-  const char text[] = "Hello from Arduino 1";
+  const char text[] = "Hello from Arduino uno 1";
   radio.stopListening();
   radio.write(&text, sizeof(text));
   Serial.println("Message sent");
