@@ -13,7 +13,7 @@
 #define sensor1 34
 #define DHTPIN 4  
 #define DHTTYPE DHT11  
-#define ANALOG_PIN A0 
+#define ANALOG_PIN A0
 #define FLOW_SENSOR_PIN 19  // Pin for the flow sensor
 #define RELAY_PIN 23        // Pin for the relay
 
