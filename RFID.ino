@@ -36,7 +36,7 @@ void setup() {
   SPI.begin();                  // Initialize SPI bus
   mfrc522.PCD_Init();           // Initialize MFRC522 RFID reader
 
-  rtc.begin(); // Initialize RTC
+  rtc.begin(); // Initialize RTC module
   if (!rtc.isrunning()) { // Set RTC time if not set
     rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
   }
