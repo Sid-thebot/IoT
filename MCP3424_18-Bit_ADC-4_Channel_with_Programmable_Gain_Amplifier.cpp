@@ -33,7 +33,7 @@ void loop() {
   long adcValue = readADC(MCP3424_READ_CHANNEL_1 | MCP3424_SAMPLE_RATE_18BIT | MCP3424_GAIN_1);
   Serial.print("ADC Value: ");
   Serial.println(adcValue);
-  delay(1000);
+  delay(1000); 
 }
 
 long readADC(byte config) {
