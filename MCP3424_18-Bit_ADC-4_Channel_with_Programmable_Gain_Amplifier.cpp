@@ -41,7 +41,7 @@ long readADC(byte config) {
   Wire.write(config | MCP3424_START_CONVERSION);
   Wire.endTransmission();
 
-  delay(150); // Wait for conversion (adjust based on resolution)
+  delay(150); // Wait for conversion  (adjust based on resolution)
 
   Wire.requestFrom(MCP3424_ADDRESS, 4);
   if (Wire.available() == 4) {
