@@ -9,7 +9,7 @@
 #include <AsyncTCP.h>
 #include <ArduinoJson.h>
 #include <LiquidCrystal_I2C.h> 
-
+ 
 #define sensor1 34
 #define DHTPIN 4  
 #define DHTTYPE DHT11
