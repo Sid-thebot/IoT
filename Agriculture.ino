@@ -19,7 +19,7 @@
 
 DHT dht(DHTPIN, DHTTYPE);
 LiquidCrystal_I2C lcd(0x27, 16, 2);
-
+   
 BlynkTimer timer;
 
 char ssid[] = "Sid";
