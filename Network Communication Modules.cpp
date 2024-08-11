@@ -7,7 +7,7 @@ void setup() {
   Serial.begin(9600);
   delay(1000);
   mySerial.print("AT+CMGF=1\r");
-  delay(100);
+  delay(100); 
   mySerial.print("AT+CMGS=\"+1234567890\"\r");
   delay(100);
   mySerial.print("Hello from Arduino!\r");
