@@ -6,7 +6,7 @@
 MFRC522 mfrc522(SS_PIN, RST_PIN);
 
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(9600); 
   SPI.begin();
   mfrc522.PCD_Init();
 }
