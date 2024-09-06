@@ -14,6 +14,6 @@ void setup() {
   delay(100);
   mySerial.write(26); // ASCII code of CTRL+Z
 }
-
+ 
 void loop() {
 }
