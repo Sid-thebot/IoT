@@ -1,0 +1,136 @@
+#include <WiFi.h>
+#include <WiFiUdp.h>
+#include <NTPClient.h>
+#include <Wire.h>
+#include <LiquidCrystal_I2C.h>
+#include <DHT.h>
+#include <time.h>
+
+// Define DHT11
+#define DHTPIN 4   // GPIO 4 for DHT11
+#define DHTTYPE DHT11
+DHT dht(DHTPIN, DHTTYPE);
+
+// I2C LCD Settings
+LiquidCrystal_I2C lcd(0x27, 20, 4);
+
+// NTP Client settings
+WiFiUDP ntpUDP;
+NTPClient timeClient(ntpUDP, "pool.ntp.org", 19800, 60000); // IST (GMT +5:30)
+
+// Push Button for SmartConfig
+#define SWITCH_PIN 15
+
+// Store previous values to reduce flickering
+String prevTime = "", prevDate = "", prevDay = "";
+float prevTemp = -100, prevHumidity = -100;
+
+// Day & Month names
+const char* weekDays[7] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
+const char* months[12] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
+
+void setup() {
+    Serial.begin(115200);
+    lcd.init();
+    lcd.backlight();
+    
+    pinMode(SWITCH_PIN, INPUT_PULLUP); // Pull-up resistor for switch
+    
+    lcd.setCursor(0, 0);
+    lcd.print("Checking Wi-Fi...");
+
+    WiFi.mode(WIFI_STA);
+
+    // If switch is pressed, enter SmartConfig mode
+    if (digitalRead(SWITCH_PIN) == LOW) {  
+        Serial.println("Switch pressed! Entering SmartConfig mode...");
+        lcd.setCursor(0, 1);
+        lcd.print("SmartConfig Mode");
+
+        WiFi.beginSmartConfig();
+        while (!WiFi.smartConfigDone()) {
+            delay(500);
+            Serial.print(".");
+        }
+        Serial.println("\nSmartConfig received!");
+    } else {
+        WiFi.begin(); // Connect to last saved Wi-Fi
+    }
+
+    // Wait for Wi-Fi connection
+    while (WiFi.status() != WL_CONNECTED) {
+        delay(500);
+        Serial.print(".");
+    }
+
+    Serial.println("\nConnected to Wi-Fi!");
+    lcd.clear();
+    lcd.setCursor(2, 0);
+    lcd.print("Wi-Fi Connected!");
+    lcd.setCursor(7, 1);
+    lcd.print("Welcome!");
+    lcd.setCursor(5, 2);
+    lcd.print("name");
+    lcd.setCursor(7, 3);
+    lcd.print("Rainbow!");
+    delay(4000);
+    lcd.clear();
+
+    timeClient.begin(); // Start NTP Client
+    dht.begin();        // Start DHT11 sensor
+}
+
+void loop() {
+    timeClient.update();
+    
+    // Get time
+    String formattedTime = timeClient.getFormattedTime();
+    time_t rawTime = timeClient.getEpochTime();
+
+    // Convert to local time
+    struct tm *timeInfo = localtime(&rawTime);
+    String dayOfWeek = weekDays[timeInfo->tm_wday];
+    String formattedDate = String(timeInfo->tm_mday) + " " + months[timeInfo->tm_mon] + " " + String(timeInfo->tm_year + 1900);
+
+    // Get DHT11 temperature & humidity
+    float temperature = dht.readTemperature();
+    float humidity = dht.readHumidity();
+
+    // **Update LCD only when values change to prevent flickering**
+    if (formattedTime != prevTime) {
+        prevTime = formattedTime;
+        lcd.setCursor(0, 0);
+        lcd.print("Time: ");
+        lcd.print(formattedTime);
+        lcd.print("  ");
+    }
+
+    if (dayOfWeek != prevDay) {
+        prevDay = dayOfWeek;
+        lcd.setCursor(0, 1);
+        lcd.print("Day : ");
+        lcd.print(dayOfWeek);
+        lcd.print("    ");
+    }
+
+    if (formattedDate != prevDate) {
+        prevDate = formattedDate;
+        lcd.setCursor(0, 2);
+        lcd.print("Date: ");
+        lcd.print(formattedDate);
+        lcd.print("  ");
+    }
+
+    if (temperature != prevTemp || humidity != prevHumidity) {
+        prevTemp = temperature;
+        prevHumidity = humidity;
+        lcd.setCursor(0, 3);
+        lcd.print("T: ");
+        lcd.print(temperature, 1);
+        lcd.print("C  H: ");
+        lcd.print(humidity, 1);
+        lcd.print("%  ");
+    }
+
+    delay(1000); // Refresh every second
+}
